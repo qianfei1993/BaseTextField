@@ -45,5 +45,25 @@
     self.typeCHTextField.inputType = InputTypeCHZNOrNumberOrLetter;
 }
 
+// 手动调用，验证输入内容的合法性
+- (BOOL)isLegal{
+    // 手动验证手机号码输入合法性
+    CheckState state = [self.typePhoneNumTextField legalWithRegex:nil];
+    if (state == CheckStateNormal) {
+        self.resultLabel.text = @"输入内容合法";
+        return YES;
+    }
+    if (state == CheckStateEmpty) {
+        self.resultLabel.text = @"输入内容为空";
+    }
+    if (state == CheckStateNotInLimit) {
+        self.resultLabel.text = @"输入内容必须在限制字以内";
+    }
+    if (state == CheckStateNotRegular) {
+        self.resultLabel.text = @"输入内容不合法";
+    }
+    return NO;
+}
+
 ```
 
