@@ -9,8 +9,31 @@
 #import "ViewController.h"
 #import "BaseTextField.h"
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet BaseTextField *phoneTextField;
-@property (weak, nonatomic) IBOutlet BaseTextField *textField;
+
+// 不做验证
+@property (weak, nonatomic) IBOutlet BaseTextField *typeNoneTextField;
+
+// 自定义验证类型
+@property (weak, nonatomic) IBOutlet BaseTextField *typeCustomTextField;
+
+// 手机号输入验证
+@property (weak, nonatomic) IBOutlet BaseTextField *typePhoneNumTextField;
+
+// 密码输入验证
+@property (weak, nonatomic) IBOutlet BaseTextField *typePasswordTextField;
+
+// 金额输入验证
+@property (weak, nonatomic) IBOutlet BaseTextField *typeMoneyTextField;
+
+// 身份证输入验证
+@property (weak, nonatomic) IBOutlet BaseTextField *typeIdCardTextField;
+
+// 邮箱输入验证
+@property (weak, nonatomic) IBOutlet BaseTextField *typeEmailTextField;
+
+// 限制输入中文-字母-数字
+@property (weak, nonatomic) IBOutlet BaseTextField *typeCHTextField;
+
 @property (weak, nonatomic) IBOutlet UILabel *resultLabel;
 
 @end
@@ -20,51 +43,69 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //手机号输入
-    //效验手机号类型
-    self.phoneTextField.checkType = CheckTypePhoneNumber;
-    //效验结果
-    self.phoneTextField.block = ^(NSString *string, NSInteger CheckState) {
-        NSLog(@"%@",string);
-        if (CheckState == CheckStateEmpty) {
-            self.resultLabel.text = @"输入内容为空";
-        }else if (CheckState == CheckStateNotInLimit) {
-            self.resultLabel.text = @"输入内容必须在限制字以内";
-        }else if (CheckState == CheckStateNotRegular) {
-            self.resultLabel.text = @"输入内容不合法";
-        }else if (CheckState == CheckStateNormal) {
-            self.resultLabel.text = @"输入内容合法";
-        }
-    };
+    // 不做验证
+    self.typeNoneTextField.inputType = InputTypeNone;
     
-    
-    //效验类型
-    self.textField.checkType = CheckNone;
+    // 自定义验证类型
+    //输入类型
+    self.typeCustomTextField.inputType = InputTypeNone;
+    //placeholder内容
+    self.typeCustomTextField.placeholder = @"我不是默认Placeholder";
     //placeholder颜色
-    self.textField.placeholderColor = [UIColor redColor];
+    self.typeCustomTextField.placeholderColor = [UIColor redColor];
     //允许输入的最小值
-    self.textField.minLength = 5;
+    self.typeCustomTextField.minLength = 5;
     //允许输入的最大值
-    self.textField.maxLength = 16;
-    //回调结果   输入内容：string，效验结果：CheckState
-    self.textField.block = ^(NSString *string, NSInteger CheckState) {
-        NSLog(@"%@",string);
-        if (CheckState == CheckStateEmpty) {
-            self.resultLabel.text = @"输入内容为空";
-        }else if (CheckState == CheckStateNotInLimit) {
-            self.resultLabel.text = @"输入内容必须在限制字以内";
-        }else if (CheckState == CheckStateNotRegular) {
-            self.resultLabel.text = @"输入内容不合法";
-        }else if (CheckState == CheckStateNormal) {
-            self.resultLabel.text = @"输入内容合法";
-        }
-    };
+    self.typeCustomTextField.maxLength = 16;
+    
+    
+    // 手机号输入验证
+    self.typePhoneNumTextField.inputType = InputTypePhoneNumber;
+    
+   
+    // 密码输入验证
+    self.typePasswordTextField.inputType = InputTypePassword;
+    
+    // 金额输入验证
+    self.typeMoneyTextField.inputType = InputTypeMoney;
+    
+    // 身份证输入验证
+    self.typeIdCardTextField.inputType = InputTypeIdCard;
+    
+    // 邮箱输入验证
+    self.typeEmailTextField.inputType = InputTypeEmail;
+    
+    // 限制输入中文-字母-数字
+    self.typeCHTextField.inputType = InputTypeCHZNOrNumberOrLetter;
 }
 
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self.phoneTextField resignFirstResponder];
-    [self.textField resignFirstResponder];
+    [self.view endEditing:YES];
+    // 手动验证手机号码输入合法性
+    BOOL isLegal = [self isLegal];
 }
+
+
+- (BOOL)isLegal{
+    // 手动验证手机号码输入合法性
+    CheckState state = [self.typePhoneNumTextField legalWithRegex:nil];
+    if (state == CheckStateNormal) {
+        self.resultLabel.text = @"输入内容合法";
+        return YES;
+    }
+    if (state == CheckStateEmpty) {
+        self.resultLabel.text = @"输入内容为空";
+    }
+    if (state == CheckStateNotInLimit) {
+        self.resultLabel.text = @"输入内容必须在限制字以内";
+    }
+    if (state == CheckStateNotRegular) {
+        self.resultLabel.text = @"输入内容不合法";
+    }
+    return NO;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

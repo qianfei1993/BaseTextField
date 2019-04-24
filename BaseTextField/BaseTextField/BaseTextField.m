@@ -5,7 +5,7 @@
 //  Copyright © 2018年 damai. All rights reserved.
 
 #import "BaseTextField.h"
-#define kMoney  @"0123456789."
+#define kISNullString(str) ([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 ? YES : NO )
 // 输入限制
 typedef NS_ENUM(NSInteger, LimitType){
     LimitTypeNone             = 0,              // 全字符
@@ -23,39 +23,39 @@ typedef NS_ENUM(NSInteger, LimitType){
 // 中文
 - (BOOL)isCHZN{
     
-    NSString *tmpRegex = @"^[\\u4e00-\\u9fa5]+$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^[\\u4e00-\\u9fa5]+$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 字母
 - (BOOL)isLetter{
     
-    NSString *tmpRegex = @"^[A-Za-z]+$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^[A-Za-z]+$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 数字
 - (BOOL)isNumber{
     
-    NSString *tmpRegex = @"^[0-9]+$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^[0-9]+$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 标点符号
 - (BOOL)isPunctuation{
     
-    NSString *tmpRegex = @"^[[:punct:]]+$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^[[:punct:]]+$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
-// 限制条件
+// 输入金额
 - (BOOL)isPrice{
  
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:kMoney] invertedSet];
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789."] invertedSet];
     NSString *filtered = [[self componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
     return [self isEqualToString:filtered];
 }
@@ -64,78 +64,69 @@ typedef NS_ENUM(NSInteger, LimitType){
 // 密码
 - (BOOL)isPassword{
 
-    //NSString *tmpRegex = @"^[a-zA-Z]\\w{6,}$";必须字母开始
+    //NSString *tmpRegex = @"^[a-zA-Z]\\w{6,18}$";必须字母开始
     //NSString *tmpRegex = @"^[0-9A-Za-z]{6,18}$";
-    NSString *tmpRegex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
-// 验证码
+// 验证码（6位）
 - (BOOL)isVerificationCode{
     
-    NSString *tmpRegex = @"^[0-9]{6}$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^[0-9]{6}$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 邮箱
 - (BOOL)isEmail{
 
-    //NSString *tmpRegex = @"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-    NSString *tmpRegex = @"^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
-// 浮点数
-- (BOOL)isFloat{
-    
-    NSString *tmpRegex = @"^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
-}
 
 // 电话
 - (BOOL)isTel{
     
-    NSString *tmpRegex = @"^((\\(\\d{2,3}\\))|(\\d{3}\\-))?(\\(0\\d{2,3}\\)|0\\d{2,3}-)?[1-9]\\d{6,7}(\\-\\d{1,4})?$";
-    NSPredicate *tmpTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", tmpRegex];
-    return [tmpTest evaluateWithObject:self];
+    NSString *regexStr = @"^((\\(\\d{2,3}\\))|(\\d{3}\\-))?(\\(0\\d{2,3}\\)|0\\d{2,3}-)?[1-9]\\d{6,7}(\\-\\d{1,4})?$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 手机
 - (BOOL)isPhone{
     
     if (self.length != 11){ return NO; }
-    //NSString *MOBILE = @"^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
-    NSString *MOBILE = @"^(1[3456789][0-9])\\d{8}";
-    NSPredicate *regextestmm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
-    return [regextestmm evaluateWithObject:self];
+    NSString *regexStr = @"^(1[3456789][0-9])\\d{8}";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 金额
 - (BOOL)isMoney{
     
-    NSString *reg = @"^([0-9]+|[0-9]{1,3}(,[0-9]{3})*)(.[0-9]{1,2})?$";
-    NSPredicate *regextestmm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", reg];
-    return [regextestmm evaluateWithObject:self];
+    NSString *regexStr = @"^([0-9]+|[0-9]{1,3}(,[0-9]{3})*)(.[0-9]{1,2})?$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 // 身份证
 - (BOOL)isIDCard{
     
-    NSString *reg = @"^\\d{15}|\\d{18}|\\d{17}(\\d|X|x)";
-    NSPredicate *regextestmm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", reg];
-    return [regextestmm evaluateWithObject:self];
+    NSString *regexStr = @"^\\d{15}|\\d{18}|\\d{17}(\\d|X|x)";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 //中英文数字
 -(BOOL)isCHZNOrNumberOrLetter{
-    NSString *reg = @"/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/";
+    NSString *regexStr = @"/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/";
     //NSString *reg = @"/^[A-Za-z0-9\u4e00-\u9fa5]+$/";
-    NSPredicate *regextestmm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", reg];
-    return [regextestmm evaluateWithObject:self];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexStr];
+    return [predicate evaluateWithObject:self];
 }
 
 //对系统键盘做判断
@@ -148,7 +139,6 @@ typedef NS_ENUM(NSInteger, LimitType){
 }
 
 -(BOOL)isRightChar:(int)a{
-    NSLog(@"%d",a);
     
     if ((a >= 0x4e00 && a <= 0x9fa5) || (a>=65 && a<91) || (a>=97 && a<123) || (a>=48 && a<58)) {
         return YES;
@@ -160,11 +150,16 @@ typedef NS_ENUM(NSInteger, LimitType){
 @interface BaseTextField()<UITextFieldDelegate>
 
 @property(nonatomic, assign)LimitType limitType;
-@property(nonatomic, assign)CheckState checkState;
 
 @end
 @implementation BaseTextField
 
+- (instancetype)init{
+    if (self = [super init]) {
+        [self initialize];
+    }
+    return self;
+}
 
 -(instancetype)initWithFrame:(CGRect)frame{
     
@@ -187,66 +182,73 @@ typedef NS_ENUM(NSInteger, LimitType){
 -(void)initialize{
     
     //设置默认值
-    self.checkType = CheckNone;
+    self.inputType = InputTypeNone;
+    self.secureTextEntry = NO;
+    self.delegate = self;
     self.textAlignment = NSTextAlignmentLeft;
-    
     //设置边框和颜色
     self.layer.cornerRadius = 5;
     self.backgroundColor = [UIColor whiteColor];
     self.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0];
-    self.font = [UIFont systemFontOfSize:14];
-    
+    self.font = [UIFont systemFontOfSize:15];
     [self addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    self.delegate = self;
 }
 
+// 占位文字颜色
 -(void)setPlaceholderColor:(UIColor *)placeholderColor{
     
     _placeholderColor = placeholderColor;
     [self setValue:_placeholderColor forKeyPath:@"_placeholderLabel.textColor"];
 }
 
-// 效验输入类型 1.确定键盘类型，2.输入类型限制，3.输入长度限制
--(void)setCheckType:(CheckType)checkType{
-    
-    _checkType = checkType;
-    self.secureTextEntry = NO;
-    switch (_checkType) {
-        case CheckNone:
+
+// 设置输入类型 1.确定键盘类型，2.输入类型限制，3.输入长度限制
+- (void)setInputType:(InputType)inputType{
+    _inputType = inputType;
+    switch (_inputType) {
+        case InputTypeNone:
+            self.placeholder = @"请输入内容";
             self.limitType = LimitTypeNone;
             self.keyboardType = UIKeyboardTypeDefault;
             break;
-        case CheckTypePhoneNumber:
+        case InputTypePhoneNumber:
             self.maxLength = 11;
+            self.placeholder = @"请输入手机号码";
             self.limitType = LimitTypeNumber;
             self.keyboardType = UIKeyboardTypeNumberPad;
             break;
-        case CheckTypePassword:
+        case InputTypePassword:
             self.minLength = 6;
             self.maxLength = 18;
+            self.placeholder = @"请输入密码";
             self.limitType = LimitTypeNumber | LimitTypeLetter;
             self.keyboardType = UIKeyboardTypeASCIICapable;
             self.secureTextEntry = YES;
             break;
-        case CheckTypeVerificatioCode:
-            self.maxLength = 6;
+        case InputTypeVerifyCode:
+            self.maxLength = 4;
+            self.placeholder = @"请输入验证码";
             self.limitType = LimitTypeNumber;
             self.keyboardType = UIKeyboardTypeNumberPad;
             break;
-        case CheckTypeMoney:
+        case InputTypeMoney:
+            self.placeholder = @"请输入金额";
             self.limitType = LimitTypeMoney;
             self.keyboardType = UIKeyboardTypeDecimalPad;
             break;
-        case CheckTypeIdCard:
+        case InputTypeIdCard:
+            self.placeholder = @"请输入身份证号码";
             self.limitType = LimitTypeLetter | LimitTypeNumber;
             self.keyboardType = UIKeyboardTypeASCIICapable;
             break;
-        case CheckTypeEmail:
+        case InputTypeEmail:
+            self.placeholder = @"请输入邮箱";
             self.limitType = LimitTypeLetter | LimitTypeNumber | LimitTypePunctuation;
             self.keyboardType = UIKeyboardTypeASCIICapable;
             break;
-        case CheckTypeCHZNOrNumberOrLetter:
+        case InputTypeCHZNOrNumberOrLetter:
+            self.placeholder = @"请输入内容";
             self.limitType = LimitTypeCHZNOrNumOrLetter;
             self.keyboardType = UIKeyboardTypeDefault;
             break;
@@ -262,7 +264,6 @@ typedef NS_ENUM(NSInteger, LimitType){
     if (self.textFieldDidChangeBlock) {
         self.textFieldDidChangeBlock(textField.text);
     }
-   
     NSString *tempString = textField.text;
     if (textField.markedTextRange == nil && tempString.length > self.maxLength && self.maxLength > 0){
         textField.text = [tempString substringToIndex:self.maxLength];
@@ -270,58 +271,46 @@ typedef NS_ENUM(NSInteger, LimitType){
 }
 
 #pragma mark - private
-// 更新正则校验状态
--(void)updateCheckState{
-    // 1.空字符串
-    if (self.text.length <= 0) {
-        self.checkState = CheckStateEmpty;
-        return ;
-    }
-    // 2.超出限制范围
-    if (self.maxLength > 0 && (self.text.length < self.minLength || self.text.length > self.maxLength)) {
-        self.checkState = CheckStateNotInLimit;
-        return ;
-    }
-    // 3.正则校验
-    if ((self.checkType == CheckTypePhoneNumber && ![self.text isPhone]) ||
-        (self.checkType == CheckTypePassword  && ![self.text isPassword]) ||
-        (self.checkType == CheckTypeVerificatioCode  && ![self.text isVerificationCode]) ||
-        (self.checkType == CheckTypeCHZNOrNumberOrLetter && ![self.text isCHZNOrNumberOrLetter]) || (self.checkType == CheckTypeMoney && ![self.text isMoney]) || (self.checkType == CheckTypeIdCard && ![self.text isIDCard]) || (self.checkType == CheckTypeEmail && ![self.text isEmail])){
-        self.checkState = CheckStateNotRegular;
-        return;
-    }
-    self.checkState = CheckStateNormal;
-}
-
-
 // 是否允许输入
 -(BOOL)suitableInput:(NSString *)text{
     
+    // 全字符
     if (self.limitType == LimitTypeNone) {
         return YES;
     }
+    // 输入中文
     if ((self.limitType & LimitTypeCHZN) == LimitTypeCHZN) {
         if ([text isCHZN] || [text isSystem]) {
             return YES;
         }
     }
+    // 输入字母
     if ((self.limitType & LimitTypeLetter) == LimitTypeLetter) {
         if ([text isLetter]) {
             return YES;
         }
     }
+    // 输入数字
     if ((self.limitType & LimitTypeNumber) == LimitTypeNumber) {
         if ([text isNumber]) {
             return YES;
         }
     }
+    // 输入数字和.
     if ((self.limitType & LimitTypeMoney) == LimitTypeMoney) {
         if ([text isPrice]) {
             return YES;
         }
     }
+    // 输入标点符号
     if ((self.limitType & LimitTypePunctuation) == LimitTypePunctuation) {
         if ([text isPunctuation]) {
+            return YES;
+        }
+    }
+    // 输入中文英文数字
+    if ((self.limitType & LimitTypeCHZNOrNumOrLetter) == LimitTypeCHZNOrNumOrLetter) {
+        if ([text isNumber] || [text isCHZN] || [text isSystem] || [text isLetter]) {
             return YES;
         }
     }
@@ -355,27 +344,16 @@ typedef NS_ENUM(NSInteger, LimitType){
     if (self.didEndEditingBlock) {
         self.didEndEditingBlock(textField);
     }
-    //验证字符串合法性
-    if (self.block) {
-        self.block(textField.text, self.checkState);
-    }
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason NS_AVAILABLE_IOS(10_0){
     
-    //校验输入结果
-    [self updateCheckState];
     if (self.didEndEditingBlock) {
         self.didEndEditingBlock(textField);
-    }
-    //验证字符串合法性
-    if (self.block) {
-        self.block(textField.text, self.checkState);
     }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    //校验输入结果
-    [self updateCheckState];
+    
     if (self.shouldChangeCharactersInRangeBlock) {
        return self.shouldChangeCharactersInRangeBlock(textField, range, string);
     }
@@ -383,9 +361,15 @@ typedef NS_ENUM(NSInteger, LimitType){
     if ([string isEqualToString:@"\n"] || [string isEqualToString:@""]){
         return YES;
     }
+    //输入限制
+    if (!self.markedTextRange) {
+        if (self.maxLength > 0 && textField.text.length > self.maxLength) {
+            return NO;
+        }
+    }
     
     //金额判断
-    if (self.checkType == CheckTypeMoney) {
+    if (self.inputType == InputTypeMoney) {
         
         if ([string length] > 0) {
             
@@ -447,8 +431,6 @@ typedef NS_ENUM(NSInteger, LimitType){
      return [self suitableInput:string];
 }
 
-
-    
 - (BOOL)textFieldShouldClear:(UITextField *)textField{
     
     if (self.shouldClearBlock) {
@@ -473,5 +455,42 @@ typedef NS_ENUM(NSInteger, LimitType){
         return NO;
     }
 }
+
+/**
+ *手动效验字符串合法性
+ *regex : 正则字符串，为空则使用默认正则验证，不为空使用传入的正则验证
+ *
+ */
+- (CheckState)legalWithRegex:(NSString*)regex{
+    
+    // 1.空字符串
+    if (self.text.length <= 0) {
+        return CheckStateEmpty;
+    }
+    // 2.超出限制范围
+    if (self.maxLength > 0 && (self.text.length < self.minLength || self.text.length > self.maxLength)) {
+        return CheckStateNotInLimit;
+    }
+    
+    // 自定义正则效验
+    if (regex) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        if (![predicate evaluateWithObject:self.text]) {
+            return CheckStateNotRegular;
+        }
+    }
+    
+    // 3.正则校验
+    if ((self.inputType == InputTypePhoneNumber && ![self.text isPhone]) ||
+        (self.inputType == InputTypePassword  && ![self.text isPassword]) ||
+        (self.inputType == InputTypeVerifyCode  && ![self.text isVerificationCode]) ||
+        (self.inputType == InputTypeCHZNOrNumberOrLetter && ![self.text isCHZNOrNumberOrLetter]) || (self.inputType == InputTypeMoney && ![self.text isMoney]) || (self.inputType == InputTypeIdCard && ![self.text isIDCard]) || (self.inputType == InputTypeEmail && ![self.text isEmail])){
+        return CheckStateNotRegular;;
+    }
+    return CheckStateNormal;
+}
+
+
 
 @end
