@@ -368,7 +368,7 @@ typedef NS_ENUM(NSInteger, LimitType){
         }
     }
     
-    //金额判断
+    //金额输入
     if (self.inputType == InputTypeMoney) {
         
         if ([string length] > 0) {

@@ -14,13 +14,13 @@
  *
  */
 typedef NS_ENUM(NSInteger, InputType){
-    InputTypeNone,                  // 不做校验(默认)
-    InputTypePhoneNumber,           // 手机号码效验 （默认11位数字）
-    InputTypePassword,              // 密码(字母或数字，默认长度6-18)
-    InputTypeVerifyCode,            // 验证码（默认6位数字）
-    InputTypeMoney,                 // 人民币金额验证（小数点后最多两位，第一位输入0或.自动补齐）
-    InputTypeIdCard,                // 身份证验证
-    InputTypeEmail,                 // 邮箱验证
+    InputTypeNone,                  // 不做输入限制
+    InputTypePhoneNumber,           // 手机号码输入 （默认11位数字）
+    InputTypePassword,              // 密码输入(字母或数字，默认长度6-18)
+    InputTypeVerifyCode,            // 验证码输入（默认6位数字）
+    InputTypeMoney,                 // 人民币金额输入（小数点后最多两位，第一位输入0或.自动补齐）
+    InputTypeIdCard,                // 身份证号码输入
+    InputTypeEmail,                 // 邮箱输入
     InputTypeCHZNOrNumberOrLetter,  // 限制输入中文-字母-数字
 };
 
