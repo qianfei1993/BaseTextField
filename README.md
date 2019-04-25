@@ -4,18 +4,17 @@
 
 
 ## 介绍&使用
-#### BaseTextField,封装的UITextField基类，配置公共项，设置默认的Placeholder，使用正则限制输入与结果效验，并将常用delegate方法转为block，使用更为简单方便，一行代码满足输入需求；
+#### BaseTextField,封装的UITextField基类，配置公共项，设置默认的Placeholder，使用正则限制输入类型与结果效验，并将常用delegate方法转为block，使用简单，一行代码满足输入需求；
 #### 创建UITextField继承自BaseTextField，配置输入类型即可；
 ```
 #pragma mark —————BaseTextField—————
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // 不做验证
+    // 不限制输入
     self.typeNoneTextField.inputType = InputTypeNone;
     
     // 自定义限制属性
-    //输入类型
     self.typeCustomTextField.inputType = InputTypeNone;
     //placeholder内容
     self.typeCustomTextField.placeholder = @"我不是默认Placeholder";
@@ -26,19 +25,19 @@
     //允许输入的最大值
     self.typeCustomTextField.maxLength = 16;
     
-    // 手机号输入验证
+    // 手机号输入
     self.typePhoneNumTextField.inputType = InputTypePhoneNumber;
     
-    // 密码输入验证
+    // 密码输入
     self.typePasswordTextField.inputType = InputTypePassword;
     
-    // 金额输入验证
+    // 金额输入
     self.typeMoneyTextField.inputType = InputTypeMoney;
     
-    // 身份证输入验证
+    // 身份证输入
     self.typeIdCardTextField.inputType = InputTypeIdCard;
     
-    // 邮箱输入验证
+    // 邮箱输入
     self.typeEmailTextField.inputType = InputTypeEmail;
     
     // 限制输入中文-字母-数字
