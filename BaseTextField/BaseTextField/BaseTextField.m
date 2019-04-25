@@ -5,7 +5,6 @@
 //  Copyright © 2018年 damai. All rights reserved.
 
 #import "BaseTextField.h"
-#define kISNullString(str) ([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 ? YES : NO )
 // 输入限制
 typedef NS_ENUM(NSInteger, LimitType){
     LimitTypeNone             = 0,              // 全字符

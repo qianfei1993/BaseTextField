@@ -10,25 +10,25 @@
 #import "BaseTextField.h"
 @interface ViewController ()
 
-// 不做验证
+// 不做输入限制
 @property (weak, nonatomic) IBOutlet BaseTextField *typeNoneTextField;
 
-// 自定义验证类型
+// 自定义输入
 @property (weak, nonatomic) IBOutlet BaseTextField *typeCustomTextField;
 
-// 手机号输入验证
+// 手机号输入
 @property (weak, nonatomic) IBOutlet BaseTextField *typePhoneNumTextField;
 
-// 密码输入验证
+// 密码输入
 @property (weak, nonatomic) IBOutlet BaseTextField *typePasswordTextField;
 
-// 金额输入验证
+// 金额输入
 @property (weak, nonatomic) IBOutlet BaseTextField *typeMoneyTextField;
 
-// 身份证输入验证
+// 身份证输入
 @property (weak, nonatomic) IBOutlet BaseTextField *typeIdCardTextField;
 
-// 邮箱输入验证
+// 邮箱输入
 @property (weak, nonatomic) IBOutlet BaseTextField *typeEmailTextField;
 
 // 限制输入中文-字母-数字
@@ -43,11 +43,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // 不做验证
+    // 不做输入限制
     self.typeNoneTextField.inputType = InputTypeNone;
     
-    // 自定义验证类型
-    //输入类型
+    // 自定义输入
+    //不做输入限制
     self.typeCustomTextField.inputType = InputTypeNone;
     //placeholder内容
     self.typeCustomTextField.placeholder = @"我不是默认Placeholder";
@@ -59,20 +59,20 @@
     self.typeCustomTextField.maxLength = 16;
     
     
-    // 手机号输入验证
+    // 手机号输入
     self.typePhoneNumTextField.inputType = InputTypePhoneNumber;
     
    
-    // 密码输入验证
+    // 密码输入
     self.typePasswordTextField.inputType = InputTypePassword;
     
-    // 金额输入验证
+    // 金额输入
     self.typeMoneyTextField.inputType = InputTypeMoney;
     
-    // 身份证输入验证
+    // 身份证输入
     self.typeIdCardTextField.inputType = InputTypeIdCard;
     
-    // 邮箱输入验证
+    // 邮箱输入
     self.typeEmailTextField.inputType = InputTypeEmail;
     
     // 限制输入中文-字母-数字
@@ -84,6 +84,9 @@
     [self.view endEditing:YES];
     // 手动验证手机号码输入合法性
     BOOL isLegal = [self isLegal];
+    if (isLegal) {
+        //...
+    }
 }
 
 
